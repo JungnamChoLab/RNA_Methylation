@@ -1,1 +1,2 @@
 # RNA_Methylation
+This folder includes the analysis code to generate the figures and data in the paper entitled: "Suppression of transposon mobilization by m6A-mediated RNA sequestration in stress granules" (https://www.biorxiv.org/content/10.1101/2022.03.22.485398v1) and "m6A RNA methylation impairs gene expression variability and reproductive thermotolerance in Arabidopsis" (https://www.biorxiv.org/content/10.1101/2022.03.25.485737v1).
