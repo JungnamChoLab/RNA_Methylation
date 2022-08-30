@@ -7,6 +7,24 @@ hisat2 -p 12 --dta --rg-id $i --rg SM:$i --rna-strandness RF --fr -x ~/genome/ta
 samtools view -bS ${i}.sam > ${i}.bam;samtools sort -@ 10 ${i}.bam ${i}.sorted;samtools index ${i}.sorted.bam
 done
 
+###use stringtie to calculate FPKM
+for i in `cat name`;do 
+echo $i;
+stringtie ../hisat2/${i}.bam --rf -e -B -A ${i}.gene.abundance -G ~/genome/TAIR10_GFF3_genes_exons.gtf -p 15 -o ${i}/${i}.gtf;
+sort ${i}.gene.abundance -o ${i}.gene.abundance;
+done
+paste w0f1_input.gene.abundance w0f1_ip.gene.abundance w0f2_input.gene.abundance w0f2_ip.gene.abundance \
+w3f1_input.gene.abundance w3f1_ip.gene.abundance w3f2_input.gene.abundance w3f2_ip.gene.abundance \
+m0f1_input.gene.abundance m0f1_ip.gene.abundance m0f2_input.gene.abundance m0f2_ip.gene.abundance \
+m3f1_input.gene.abundance m3f1_ip.gene.abundance m3f2_input.gene.abundance m3f2_ip.gene.abundance \
+w0l1_input.gene.abundance w0l1_ip.gene.abundance w0l2_input.gene.abundance w0l2_ip.gene.abundance \
+w3l1_input.gene.abundance w3l1_ip.gene.abundance w3l2_input.gene.abundance w3l2_ip.gene.abundance \
+m0l1_input.gene.abundance m0l1_ip.gene.abundance m0l2_input.gene.abundance m0l2_ip.gene.abundance \
+m3l1_input.gene.abundance m3l1_ip.gene.abundance m3l2_input.gene.abundance m3l2_ip.gene.abundance > All_sample_gene.abundance
+cut -f 1-6,8,10,17,19,26,28,35,37,44,46,53,55,62,64,71,73,80,82,89,91,98,100,107,109,116,118,125,\
+127,134,136,143,145,152,154,161,163,170,172,179,181,188,190,197,199,206,208,215,217,224,226,233,\
+235,242,244,251,253,260,262,269,271,278,280,287 All_sample_gene.abundance > All_m6a_sample_gene.abundance.txt
+
 ###use MACS2 call m6A peak
 macs2 callpeak -t ../hisat2/w0f2_ip.bam -c ../hisat2/w0f2_input.bam -f BAM -g 65084214 -p 5e-2 --nomodel --extsize 50 -n w0f2_pe5_ex50
 macs2 callpeak -t ../hisat2/w0f1_ip.bam -c ../hisat2/w0f1_input.bam -f BAM -g 65084214 -p 5e-2 --nomodel --extsize 50 -n w0f1_pe5_ex50
